@@ -33,12 +33,19 @@ class Parser
 
     public function getCurrentFilePath(): string
     {
+        if (str_starts_with($this->file, '/')) { // account for absolute paths
+            return $this->file;
+        }
+
         return $this->basePath . $this->file;
     }
 
     public function parse($file): array
     {
-        $file = str_replace($this->basePath, '', $file);
+        if (!str_starts_with($file, '/')) { // account for absolute paths
+            $file = str_replace($this->basePath, '', $file);
+        }
+
         $this->file = $file;
 
         $filePath = $this->getCurrentFilePath();
